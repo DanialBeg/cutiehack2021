@@ -36,12 +36,10 @@ export default function SignIn({ providers }) {
             return;
         }
       return (
-        <div>
-          <div key={provider.name}>
+        <div key={provider.name}>
             <button variant="outline" onClick={() => signIn(provider.id)}>
               Sign in with {provider.name}
             </button>
-          </div>
         </div>
       );
       })}
