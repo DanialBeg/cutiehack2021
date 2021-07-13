@@ -1,47 +1,57 @@
-import React from "react";
-import { providers, signIn, getSession } from "next-auth/client";
-import { useRouter } from "next/dist/client/router";
+import React from 'react'
+
+import styles from '../styles/Common.module.css'
+import signinStyles from '../styles/SignIn.module.css'
+
+import { providers, signIn, getSession } from 'next-auth/client'
+import { useRouter } from 'next/dist/client/router'
 
 const SignInError = ({ error }) => {
   const errors = {
-      Signin: 'Try signing in with a different account.',
-      OAuthSignin: 'Try signing in with a different account.',
-      OAuthCallback: 'Try signing in with a different account.',
-      OAuthCreateAccount: 'Try signing in with a different account.',
-      EmailCreateAccount: 'Try signing in with a different account.',
-      Callback: 'Try signing in with a different account.',
-      OAuthAccountNotLinked: 'Please sign in with the same account you used orignally.',
-      EmailSignin: 'Check your email address.',
-      CredentialsSignin: 'Sign in failed. Make sure the details you provided are correct.',
-      default: 'Unable to sign in.'
-  }
+    Signin: "Try signing in with a different account.",
+    OAuthSignin: "Try signing in with a different account.",
+    OAuthCallback: "Try signing in with a different account.",
+    OAuthCreateAccount: "Try signing in with a different account.",
+    EmailCreateAccount: "Try signing in with a different account.",
+    Callback: "Try signing in with a different account.",
+    OAuthAccountNotLinked:
+      "Please sign in with the same account you used orignally.",
+    EmailSignin: "Check your email address.",
+    CredentialsSignin:
+      "Sign in failed. Make sure the details you provided are correct.",
+    default: "Unable to sign in.",
+  };
 
-  const errorMessage = error && (errors[error] ?? errors.default)
+  const errorMessage = error && (errors[error] ?? errors.default);
 
-  return <div className="signin-error">{errorMessage}</div>
-}
+  return <div className="signin-error">{errorMessage}</div>;
+};
 
 export default function SignIn({ providers }) {
   const {
-    query: {callbackUrl, error},
-  } = useRouter()
+    query: { callbackUrl, error },
+  } = useRouter();
 
   return (
-    <div>
+    <div className={styles.container}>
       {error &&
-        <SignInError error={error} />
+        <div className={signinStyles.errorMsg}>
+          <SignInError error={error} />
+        </div>
       }
       {Object.values(providers).map((provider) => {
         if (provider.name === "Email") {
-            return;
+          return;
         }
-      return (
-        <div key={provider.name}>
-            <button variant="outline" onClick={() => signIn(provider.id)}>
-              Sign in with {provider.name}
-            </button>
-        </div>
-      );
+        return (
+          <div 
+            key={provider.name}
+            className={signinStyles.button}
+            onClick={() => signIn(provider.id)}
+          >
+            Sign in with {provider.name}
+          </div>
+        );
       })}
     </div>
   );
